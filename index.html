@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GitHub Pages in 10 Minutes</title>
+<meta name="description" content="A beginner-friendly, step-by-step guide to publishing a free website with GitHub Pages.">
+<style>
+  :root {
+    --bg: #fbfaf7;
+    --surface: #ffffff;
+    --text: #1d1f23;
+    --muted: #5d636d;
+    --border: #e4e1da;
+    --accent: #1f7a4d;
+    --accent-soft: #e6f3ec;
+    --code-bg: #f2f0eb;
+    --warn: #8a5a00;
+    --warn-soft: #fff4dc;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #121417;
+      --surface: #1a1d21;
+      --text: #e8e6e1;
+      --muted: #a0a6ae;
+      --border: #2c3036;
+      --accent: #5cc98f;
+      --accent-soft: #1b2c23;
+      --code-bg: #23272c;
+      --warn: #f0c060;
+      --warn-soft: #2e2716;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.65;
+    font-size: 17px;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 0 16px; }
+
+  header { padding: 64px 0 32px; border-bottom: 1px solid var(--border); }
+  .eyebrow {
+    font-family: var(--mono); font-size: 13px; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--accent); margin: 0 0 12px;
+  }
+  h1 { font-size: clamp(2rem, 6vw, 3rem); line-height: 1.1; margin: 0 0 16px; letter-spacing: -0.02em; }
+  .lede { font-size: 1.15rem; color: var(--muted); margin: 0; }
+
+  nav.toc {
+    margin: 32px 0; padding: 20px 24px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 10px;
+  }
+  nav.toc strong { display: block; margin-bottom: 8px; font-size: 14px; color: var(--muted); }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+  nav.toc li { break-inside: avoid; }
+  @media (max-width: 560px) { nav.toc ol { columns: 1; } }
+
+  section { padding: 24px 0; }
+  h2 { font-size: 1.6rem; margin: 24px 0 12px; letter-spacing: -0.01em; }
+  h3 { font-size: 1.15rem; margin: 24px 0 8px; }
+
+  .step { display: grid; grid-template-columns: 44px 1fr; gap: 16px; margin: 28px 0; }
+  .num {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: grid; place-items: center; font-weight: 700; font-family: var(--mono);
+  }
+  .step h3 { margin-top: 8px; }
+
+  code {
+    font-family: var(--mono); font-size: .9em; background: var(--code-bg);
+    padding: 2px 6px; border-radius: 4px;
+  }
+  .code {
+    position: relative; margin: 12px 0; background: var(--code-bg);
+    border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  }
+  .code pre { margin: 0; padding: 16px; overflow-x: auto; font-family: var(--mono); font-size: 14px; line-height: 1.5; }
+  .code button {
+    position: absolute; top: 8px; right: 8px; font: 12px var(--mono);
+    background: var(--surface); color: var(--text); border: 1px solid var(--border);
+    border-radius: 6px; padding: 4px 10px; cursor: pointer;
+  }
+  .code button:hover { border-color: var(--accent); }
+
+  .path {
+    font-family: var(--mono); font-size: 14px; background: var(--surface);
+    border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; display: inline-block;
+  }
+  .callout {
+    border-left: 4px solid var(--accent); background: var(--accent-soft);
+    padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 16px 0;
+  }
+  .callout.warn { border-color: var(--warn); background: var(--warn-soft); }
+
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 15px; }
+  th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  th { color: var(--muted); font-weight: 600; }
+  .table-scroll { overflow-x: auto; }
+
+  details {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; padding: 12px 16px; margin: 10px 0;
+  }
+  summary { cursor: pointer; font-weight: 600; }
+  details p { margin: 10px 0 4px; }
+
+  footer {
+    border-top: 1px solid var(--border); margin-top: 48px; padding: 32px 0 64px;
+    color: var(--muted); font-size: 15px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Free hosting · No server required</p>
+    <h1>Publish a website with GitHub Pages</h1>
+    <p class="lede">GitHub Pages turns a folder of HTML, CSS, and JavaScript into a live website, for free. This guide takes you from nothing to a public URL in about ten minutes. (This page is hosted on GitHub Pages too.)</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <nav class="toc" aria-label="Contents">
+    <strong>On this page</strong>
+    <ol>
+      <li><a href="#what">What GitHub Pages is</a></li>
+      <li><a href="#before">Before you start</a></li>
+      <li><a href="#steps">Publish your first site</a></li>
+      <li><a href="#git">Using git instead of the browser</a></li>
+      <li><a href="#types">User site vs. project site</a></li>
+      <li><a href="#domain">Custom domains</a></li>
+      <li><a href="#limits">Limits to know</a></li>
+      <li><a href="#trouble">Troubleshooting</a></li>
+    </ol>
+  </nav>
+
+  <section id="what">
+    <h2>What GitHub Pages is</h2>
+    <p>GitHub Pages is static site hosting built into GitHub. You put files in a repository, flip one setting, and GitHub serves them at a URL like <code>username.github.io</code>.</p>
+    <p><strong>Static</strong> is the key word. Pages serves files exactly as they are: HTML, CSS, JavaScript, images, PDFs. It can't run server-side code like PHP, Python, or a database. Portfolios, project docs, résumés, blogs, and landing pages are all a great fit.</p>
+  </section>
+
+  <section id="before">
+    <h2>Before you start</h2>
+    <ul>
+      <li>A free <a href="https://github.com/signup">GitHub account</a></li>
+      <li>At least one HTML file. The file that loads first <strong>must be named <code>index.html</code></strong> (all lowercase)</li>
+      <li>A public repository if you're on the free plan</li>
+    </ul>
+    <p>No HTML yet? Use this starter. Save it as <code>index.html</code>:</p>
+    <div class="code"><button type="button">Copy</button><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;meta charset="UTF-8"&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+  &lt;title&gt;My First Site&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Hello, world!&lt;/h1&gt;
+  &lt;p&gt;This site is hosted on GitHub Pages.&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre></div>
+  </section>
+
+  <section id="steps">
+    <h2>Publish your first site</h2>
+
+    <div class="step">
+      <div class="num">1</div>
+      <div>
+        <h3>Create a repository</h3>
+        <p>On GitHub, click <strong>+</strong> in the top-right corner, then <strong>New repository</strong>. Give it a name (for example <code>my-site</code>), set it to <strong>Public</strong>, and click <strong>Create repository</strong>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">2</div>
+      <div>
+        <h3>Upload your files</h3>
+        <p>On the new repo's page, click <strong>uploading an existing file</strong> (or <strong>Add file → Upload files</strong>). Drag in <code>index.html</code> and anything it uses, such as CSS files and images. Click <strong>Commit changes</strong>.</p>
+        <div class="callout"><code>index.html</code> must sit at the <strong>top level</strong> of the repo, not inside a subfolder.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">3</div>
+      <div>
+        <h3>Turn on Pages</h3>
+        <p>Go to the repo's settings page and open the Pages section:</p>
+        <p><span class="path">Settings → Pages</span></p>
+        <p>Under <strong>Build and deployment</strong>, set:</p>
+        <ul>
+          <li><strong>Source:</strong> Deploy from a branch</li>
+          <li><strong>Branch:</strong> <code>main</code>, folder <code>/ (root)</code></li>
+        </ul>
+        <p>Click <strong>Save</strong>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">4</div>
+      <div>
+        <h3>Wait a minute, then visit</h3>
+        <p>GitHub builds and deploys the site, usually within a minute or two. You can watch progress in the repo's <strong>Actions</strong> tab. Refresh the Pages settings screen and you'll see your live URL:</p>
+        <div class="code"><button type="button">Copy</button><pre>https://YOUR-USERNAME.github.io/my-site/</pre></div>
+        <p>That's it. Your site is on the internet.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="num">5</div>
+      <div>
+        <h3>Update it anytime</h3>
+        <p>Edit a file on GitHub (the pencil icon) or upload a new version, then commit. Every commit to <code>main</code> redeploys the site automatically.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="git">
+    <h2>Using git instead of the browser</h2>
+    <p>Once you're comfortable, working locally with git is faster. From the folder that holds your site:</p>
+    <div class="code"><button type="button">Copy</button><pre>git init
+git add .
+git commit -m "First version of my site"
+git branch -M main
+git remote add origin https://github.com/YOUR-USERNAME/my-site.git
+git push -u origin main</pre></div>
+    <p>Then enable Pages as in Step 3. Future updates are just:</p>
+    <div class="code"><button type="button">Copy</button><pre>git add .
+git commit -m "Describe your change"
+git push</pre></div>
+  </section>
+
+  <section id="types">
+    <h2>User site vs. project site</h2>
+    <p>The repository name decides your URL.</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Type</th><th>Repo name</th><th>URL</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>User site</strong><br><span style="color:var(--muted)">One per account</span></td>
+          <td><code>username.github.io</code></td>
+          <td><code>https://username.github.io/</code></td>
+        </tr>
+        <tr>
+          <td><strong>Project site</strong><br><span style="color:var(--muted)">As many as you want</span></td>
+          <td>Anything, e.g. <code>my-site</code></td>
+          <td><code>https://username.github.io/my-site/</code></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <p>A user site makes a good personal homepage or portfolio. Project sites work well for individual projects, demos, or class assignments.</p>
+    <div class="callout warn">On a project site, links that start with <code>/</code> point to the root of <code>username.github.io</code>, not your project. Use relative paths like <code>style.css</code> or <code>images/logo.png</code> instead of <code>/style.css</code>.</div>
+  </section>
+
+  <section id="domain">
+    <h2>Custom domains</h2>
+    <p>If you own a domain, you can serve your site from it instead of <code>github.io</code>.</p>
+    <ol>
+      <li>In <span class="path">Settings → Pages</span>, type your domain under <strong>Custom domain</strong> and save. GitHub adds a <code>CNAME</code> file to your repo.</li>
+      <li>At your domain registrar, add DNS records. For a subdomain like <code>www.example.com</code>, add a <code>CNAME</code> record pointing to <code>username.github.io</code>. For an apex domain like <code>example.com</code>, use the <code>A</code> records listed in <a href="https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site">GitHub's custom domain docs</a>.</li>
+      <li>Once DNS resolves (minutes to a day), tick <strong>Enforce HTTPS</strong>.</li>
+    </ol>
+  </section>
+
+  <section id="limits">
+    <h2>Limits to know</h2>
+    <ul>
+      <li><strong>Static files only.</strong> No server-side code or databases.</li>
+      <li><strong>Public by default.</strong> Free accounts can publish from public repos; private-repo Pages needs a paid plan. Either way, the published site itself is public.</li>
+      <li><strong>Size.</strong> Keep sites under about 1 GB. Bandwidth is capped softly at around 100 GB per month.</li>
+      <li><strong>Not for commerce.</strong> GitHub doesn't allow running an online business or e-commerce site on Pages.</li>
+      <li><strong>Never commit secrets.</strong> API keys, passwords, and tokens in your repo are visible to everyone.</li>
+    </ul>
+  </section>
+
+  <section id="trouble">
+    <h2>Troubleshooting</h2>
+
+    <details>
+      <summary>I get a 404 page</summary>
+      <p>Check three things: your file is named exactly <code>index.html</code> (lowercase), it sits at the root of the branch you picked in Settings, and the deploy has finished in the <strong>Actions</strong> tab. Also confirm you're visiting the right URL, including the repo name for project sites.</p>
+    </details>
+
+    <details>
+      <summary>My CSS or images don't load</summary>
+      <p>Most likely a path problem. File names on Pages are <strong>case-sensitive</strong>, so <code>Logo.PNG</code> and <code>logo.png</code> are different files. On project sites, avoid paths that start with <code>/</code>.</p>
+    </details>
+
+    <details>
+      <summary>My changes don't show up</summary>
+      <p>Wait for the deploy in the <strong>Actions</strong> tab to finish, then hard-refresh (<code>Ctrl+Shift+R</code>, or <code>Cmd+Shift+R</code> on Mac). Browsers cache aggressively.</p>
+    </details>
+
+    <details>
+      <summary>Folders starting with an underscore are missing</summary>
+      <p>By default, Pages runs your files through Jekyll, which skips files and folders starting with <code>_</code>. Add an empty file named <code>.nojekyll</code> to the repo root to turn that off.</p>
+    </details>
+
+    <details>
+      <summary>The Pages option says I need to upgrade</summary>
+      <p>Your repo is private. Make it public under <span class="path">Settings → General → Danger Zone</span>, or upgrade your plan.</p>
+    </details>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Built as a single HTML file and published with GitHub Pages, the same way you just learned. For everything else, see the <a href="https://docs.github.com/en/pages">official GitHub Pages documentation</a>.</p>
+  </div>
+</footer>
+
+<script>
+  document.querySelectorAll('.code button').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var text = btn.nextElementSibling.innerText;
+      var done = function () {
+        btn.textContent = 'Copied';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { btn.textContent = 'Select & copy'; });
+      } else {
+        btn.textContent = 'Select & copy';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
